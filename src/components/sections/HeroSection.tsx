@@ -1,10 +1,16 @@
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
+import LiquidEther from "../LiquidEther";
 
 export function HeroSection() {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Liquid Ether Background */}
+      <div className="absolute inset-0 -z-10">
+        <LiquidEther />
+      </div>
+      
       {/* Animated Background */}
       <div className="absolute inset-0 grid-bg opacity-30 animate-grid-draw" />
       
