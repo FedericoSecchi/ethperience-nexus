@@ -1,14 +1,18 @@
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
-import LiquidEther from "../LiquidEther";
+import { lazy, Suspense } from "react";
+
+const LiquidEther = lazy(() => import("@/components/LiquidEther"));
 
 export function HeroSection() {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Liquid Ether Background */}
       <div className="absolute inset-0 -z-10">
-        <LiquidEther />
+        <Suspense fallback={null}>
+          <LiquidEther />
+        </Suspense>
       </div>
       
       {/* Animated Background */}
