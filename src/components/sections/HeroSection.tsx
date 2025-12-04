@@ -7,6 +7,7 @@ const LiquidEther = lazy(() => import("@/components/LiquidEther"));
 
 export function HeroSection() {
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -17,6 +18,10 @@ export function HeroSection() {
       return;
     }
 
+    const updateMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
     const handleScroll = () => {
       const max = window.innerWidth < 768 ? 140 : 240; // less movement on mobile
       const y = window.scrollY;
@@ -24,22 +29,30 @@ export function HeroSection() {
       setScrollProgress(clamped / max);
     };
 
+    updateMobile();
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("resize", updateMobile, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", updateMobile);
+    };
   }, []);
 
+  const heroOffset = isMobile ? -10 : -16;
+  const backgroundOffset = isMobile ? 6 : 10;
+
   const heroMotionStyle: CSSProperties = {
-    transform: `translateY(${scrollProgress * -16}px)`,
+    transform: `translateY(${scrollProgress * heroOffset}px)`,
     opacity: 1 - scrollProgress * 0.12,
   };
 
   const backgroundMotionStyle: CSSProperties = {
-    transform: `translateY(${scrollProgress * 10}px)`,
+    transform: `translateY(${scrollProgress * backgroundOffset}px)`,
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 pb-24 md:pt-28 md:pb-32">
       {/* Liquid Ether Background */}
       <div className="absolute inset-0 -z-10" style={backgroundMotionStyle}>
         <Suspense fallback={null}>
@@ -59,7 +72,7 @@ export function HeroSection() {
       <div className="container mx-auto px-4 relative z-10 text-center">
         <div
           style={heroMotionStyle}
-          className="max-w-4xl mx-auto"
+          className="max-w-xl mx-auto md:max-w-4xl"
         >
           {/* Eyebrow */}
           <motion.p
@@ -72,7 +85,7 @@ export function HeroSection() {
           </motion.p>
 
           {/* Title */}
-          <h1 className="text-4xl sm:text-5xl lg:text-7xl font-heading font-bold mb-6 leading-tight opacity-0 animate-hero-fade-up">
+          <h1 className="text-balance text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-heading font-semibold tracking-tight mb-6 leading-tight opacity-0 animate-hero-fade-up">
             Where{" "}
             <span className="text-primary text-glow animate-glitch inline-block">
               Web3
@@ -81,17 +94,17 @@ export function HeroSection() {
           </h1>
 
           {/* Subtitle */}
-          <p className="text-lg lg:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed opacity-0 animate-hero-fade-up-delayed">
+          <p className="text-base sm:text-lg text-muted-foreground mb-8 max-w-xl mx-auto leading-relaxed opacity-0 animate-hero-fade-up-delayed">
             Curated trips for builders, founders and explorers who prefer
             campfires over conference halls.
           </p>
 
           {/* CTAs */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8 opacity-0 animate-hero-fade-pop">
-            <Button variant="hero" size="lg" asChild className="transition-transform transition-shadow duration-150 hover:scale-[1.03] hover:shadow-lg">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto mb-8 opacity-0 animate-hero-fade-pop">
+            <Button variant="hero" size="lg" asChild className="w-full sm:w-auto transition-transform transition-shadow duration-150 hover:scale-[1.03] hover:shadow-lg">
               <a href="#join-us">Join the Community</a>
             </Button>
-            <Button variant="hero-outline" size="lg" asChild className="transition-transform duration-150 hover:scale-[1.02]">
+            <Button variant="hero-outline" size="lg" asChild className="w-full sm:w-auto transition-transform duration-150 hover:scale-[1.02]">
               <a href="#upcoming-trips">See Upcoming Trips</a>
             </Button>
           </div>
