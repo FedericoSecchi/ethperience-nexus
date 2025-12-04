@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
-import { lazy, Suspense, useState, useEffect } from "react";
+import { lazy, Suspense, useState, useEffect, type CSSProperties } from "react";
 
 const LiquidEther = lazy(() => import("@/components/LiquidEther"));
 
@@ -10,8 +10,15 @@ export function HeroSection() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+
+    const prefersReducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) {
+      setScrollProgress(0);
+      return;
+    }
+
     const handleScroll = () => {
-      const max = 240; // pixels of scroll to consider
+      const max = window.innerWidth < 768 ? 140 : 240; // less movement on mobile
       const y = window.scrollY;
       const clamped = Math.min(Math.max(y, 0), max);
       setScrollProgress(clamped / max);
@@ -22,15 +29,19 @@ export function HeroSection() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const heroMotionStyle: React.CSSProperties = {
-    transform: `translateY(${scrollProgress * 16}px)`,
-    opacity: 1 - scrollProgress * 0.15,
+  const heroMotionStyle: CSSProperties = {
+    transform: `translateY(${scrollProgress * -16}px)`,
+    opacity: 1 - scrollProgress * 0.12,
+  };
+
+  const backgroundMotionStyle: CSSProperties = {
+    transform: `translateY(${scrollProgress * 10}px)`,
   };
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Liquid Ether Background */}
-      <div className="absolute inset-0 -z-10">
+      <div className="absolute inset-0 -z-10" style={backgroundMotionStyle}>
         <Suspense fallback={null}>
           <LiquidEther />
         </Suspense>
