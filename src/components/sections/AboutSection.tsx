@@ -39,9 +39,9 @@ export function AboutSection() {
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* Left Content */}
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6 }}
+            initial={{ opacity: 0, x: -36, scale: 0.98 }}
+            animate={isInView ? { opacity: 1, x: 0, scale: 1 } : {}}
+            transition={{ duration: 0.7, ease: [0.22, 0.61, 0.36, 1] }}
           >
             <h2 className="text-3xl lg:text-5xl font-heading font-bold mb-6">
               What is{" "}
@@ -59,9 +59,9 @@ export function AboutSection() {
             {bullets.map((bullet, index) => (
               <motion.div
                 key={bullet.title}
-                initial={{ opacity: 0, y: 20 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
+                initial={{ opacity: 0, y: 24, scale: 0.98 }}
+                animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
+                transition={{ duration: 0.7, delay: index * 0.1, ease: [0.22, 0.61, 0.36, 1] }}
                 className="glass-card p-6 group cursor-default"
               >
                 <span className="text-3xl mb-4 block group-hover:scale-110 transition-transform duration-300">

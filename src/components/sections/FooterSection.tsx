@@ -31,9 +31,9 @@ export function FooterSection() {
 
       <div className="container mx-auto px-4 relative z-10">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
+          initial={{ opacity: 0, y: 24, scale: 0.98 }}
+          animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
+          transition={{ duration: 0.7, ease: [0.22, 0.61, 0.36, 1] }}
           className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12"
         >
           {/* Brand Column */}

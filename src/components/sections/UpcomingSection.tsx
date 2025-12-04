@@ -45,9 +45,9 @@ export function UpcomingSection() {
       <div className="container mx-auto px-4 relative z-10">
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
+          initial={{ opacity: 0, y: 24, scale: 0.98 }}
+          animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
+          transition={{ duration: 0.7, ease: [0.22, 0.61, 0.36, 1] }}
           className="text-center mb-16"
         >
           <h2 className="text-3xl lg:text-5xl font-heading font-bold mb-4">
@@ -69,9 +69,9 @@ export function UpcomingSection() {
               {trips.map((trip, index) => (
                 <motion.div
                   key={trip.title}
-                  initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
-                  animate={isInView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ duration: 0.5, delay: index * 0.2 }}
+                  initial={{ opacity: 0, x: index % 2 === 0 ? -36 : 36, scale: 0.98 }}
+                  animate={isInView ? { opacity: 1, x: 0, scale: 1 } : {}}
+                  transition={{ duration: 0.7, delay: index * 0.2, ease: [0.22, 0.61, 0.36, 1] }}
                   className={`relative pl-8 lg:pl-0 ${
                     index % 2 === 0
                       ? "lg:pr-[calc(50%+2rem)] lg:text-right"

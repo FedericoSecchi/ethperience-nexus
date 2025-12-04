@@ -60,9 +60,9 @@ export function JoinSection() {
         <div className="max-w-2xl mx-auto">
           {/* Header */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6 }}
+            initial={{ opacity: 0, y: 24, scale: 0.98 }}
+            animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
+            transition={{ duration: 0.7, ease: [0.22, 0.61, 0.36, 1] }}
             className="text-center mb-12"
           >
             <h2 className="text-3xl lg:text-5xl font-heading font-bold mb-4">
@@ -76,9 +76,9 @@ export function JoinSection() {
 
           {/* Form */}
           <motion.form
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            initial={{ opacity: 0, y: 36, scale: 0.98 }}
+            animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
+            transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 0.61, 0.36, 1] }}
             onSubmit={handleSubmit}
             className="glass-card p-6 lg:p-8 space-y-6"
           >

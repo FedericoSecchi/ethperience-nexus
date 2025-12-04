@@ -49,9 +49,9 @@ export function ExperiencesSection() {
       <div className="container mx-auto px-4 relative z-10">
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
+          initial={{ opacity: 0, y: 24, scale: 0.98 }}
+          animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
+          transition={{ duration: 0.7, ease: [0.22, 0.61, 0.36, 1] }}
           className="text-center mb-16"
         >
           <h2 className="text-3xl lg:text-5xl font-heading font-bold mb-4">
@@ -68,9 +68,9 @@ export function ExperiencesSection() {
           {experiences.map((exp, index) => (
             <motion.div
               key={exp.title}
-              initial={{ opacity: 0, y: 30, rotate: -2 }}
-              animate={isInView ? { opacity: 1, y: 0, rotate: 0 } : {}}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+              initial={{ opacity: 0, y: 36, scale: 0.98, rotate: -2 }}
+              animate={isInView ? { opacity: 1, y: 0, scale: 1, rotate: 0 } : {}}
+              transition={{ duration: 0.7, delay: index * 0.1, ease: [0.22, 0.61, 0.36, 1] }}
               className="glass-card p-6 flex flex-col h-full group"
             >
               {/* Emoji */}
