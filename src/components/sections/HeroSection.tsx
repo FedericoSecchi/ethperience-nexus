@@ -1,11 +1,32 @@
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useState, useEffect } from "react";
 
 const LiquidEther = lazy(() => import("@/components/LiquidEther"));
 
 export function HeroSection() {
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const handleScroll = () => {
+      const max = 240; // pixels of scroll to consider
+      const y = window.scrollY;
+      const clamped = Math.min(Math.max(y, 0), max);
+      setScrollProgress(clamped / max);
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const heroMotionStyle: React.CSSProperties = {
+    transform: `translateY(${scrollProgress * 16}px)`,
+    opacity: 1 - scrollProgress * 0.15,
+  };
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Liquid Ether Background */}
@@ -25,10 +46,8 @@ export function HeroSection() {
 
       {/* Content */}
       <div className="container mx-auto px-4 relative z-10 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+        <div
+          style={heroMotionStyle}
           className="max-w-4xl mx-auto"
         >
           {/* Eyebrow */}
@@ -42,44 +61,29 @@ export function HeroSection() {
           </motion.p>
 
           {/* Title */}
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="text-4xl sm:text-5xl lg:text-7xl font-heading font-bold mb-6 leading-tight"
-          >
+          <h1 className="text-4xl sm:text-5xl lg:text-7xl font-heading font-bold mb-6 leading-tight opacity-0 animate-hero-fade-up">
             Where{" "}
             <span className="text-primary text-glow animate-glitch inline-block">
               Web3
             </span>{" "}
             Meets the Road
-          </motion.h1>
+          </h1>
 
           {/* Subtitle */}
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6 }}
-            className="text-lg lg:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed"
-          >
+          <p className="text-lg lg:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed opacity-0 animate-hero-fade-up-delayed">
             Curated trips for builders, founders and explorers who prefer
             campfires over conference halls.
-          </motion.p>
+          </p>
 
           {/* CTAs */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8"
-          >
-            <Button variant="hero" size="lg" asChild>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8 opacity-0 animate-hero-fade-pop">
+            <Button variant="hero" size="lg" asChild className="transition-transform transition-shadow duration-150 hover:scale-[1.03] hover:shadow-lg">
               <a href="#join-us">Join the Community</a>
             </Button>
-            <Button variant="hero-outline" size="lg" asChild>
+            <Button variant="hero-outline" size="lg" asChild className="transition-transform duration-150 hover:scale-[1.02]">
               <a href="#upcoming-trips">See Upcoming Trips</a>
             </Button>
-          </motion.div>
+          </div>
 
           {/* Support Text */}
           <motion.p
@@ -90,7 +94,7 @@ export function HeroSection() {
           >
             Small groups · Real connections · No cringe networking.
           </motion.p>
-        </motion.div>
+        </div>
       </div>
 
       {/* Scroll Indicator */}
