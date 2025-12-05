@@ -3,7 +3,6 @@ import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -13,40 +12,48 @@ import {
 } from "@/components/ui/select";
 import { MessageCircle } from "lucide-react";
 
-const interestOptions = [
-  { value: "viajes", label: "Viajes" },
-  { value: "comunidad", label: "Comunidad" },
-  { value: "sponsor", label: "Sponsor" },
-];
+const experiences = {
+  snowdao: {
+    label: "SnowDAO",
+    tg: "https://t.me/ethperience",
+  },
+  hackerboat: {
+    label: "Hacker Boat",
+    tg: "https://t.me/ethperience",
+  },
+  cafechiller: {
+    label: "Cafe Chiller",
+    tg: "https://t.me/ethperience",
+  },
+  roadtopn: {
+    label: "Road to PN",
+    tg: "https://t.me/ethperience",
+  },
+};
 
 export function JoinSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const [formData, setFormData] = useState({
-    alias: "",
-    telegram: "",
-    interest: "",
-    message: "",
-  });
+  const [alias, setAlias] = useState("");
+  const [telegram, setTelegram] = useState("");
+  const [experience, setExperience] = useState("snowdao");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const { alias, telegram, interest, message } = formData;
+    const exp = experiences[experience as keyof typeof experiences];
+    const telegramFormatted = telegram ? ` (@${telegram})` : "";
 
-    // Build mailto URL
-    const subject = encodeURIComponent("ETHperience – New contact");
-    const body = encodeURIComponent(
-      `Alias: ${alias}\nTelegram: ${telegram}\nInterés: ${interest}\nMensaje:\n${message}`
-    );
+    const message = `Hey! I'm ${alias}${telegramFormatted}. I'd love to join ETHperience and I'm interested in ${exp.label}. Nice to meet everyone! 🙌`;
 
-    const mailtoUrl = `mailto:federico.secchimarino@gmail.com?subject=${subject}&body=${body}`;
+    const tgUrl = `${exp.tg}?text=${encodeURIComponent(message)}`;
 
-    // Open email client
-    window.location.href = mailtoUrl;
+    window.open(tgUrl, "_blank");
 
     // Reset form
-    setFormData({ alias: "", telegram: "", interest: "", message: "" });
+    setAlias("");
+    setTelegram("");
+    setExperience("snowdao");
   };
 
   return (
@@ -87,10 +94,8 @@ export function JoinSection() {
               <Input
                 id="alias"
                 name="alias"
-                value={formData.alias}
-                onChange={(e) =>
-                  setFormData({ ...formData, alias: e.target.value })
-                }
+                value={alias}
+                onChange={(e) => setAlias(e.target.value)}
                 required
                 className="bg-muted/50 border-border focus:border-primary focus:ring-primary/20"
               />
@@ -98,57 +103,35 @@ export function JoinSection() {
 
             {/* Telegram */}
             <div className="space-y-2">
-              <Label htmlFor="telegram">Telegram handle *</Label>
+              <Label htmlFor="telegram">Telegram (sin @)</Label>
               <Input
                 id="telegram"
                 name="telegram"
-                value={formData.telegram}
-                onChange={(e) =>
-                  setFormData({ ...formData, telegram: e.target.value })
-                }
-                placeholder="@username"
-                required
+                value={telegram}
+                onChange={(e) => setTelegram(e.target.value)}
+                placeholder="username"
                 className="bg-muted/50 border-border focus:border-primary focus:ring-primary/20"
               />
             </div>
 
-            {/* Interest */}
+            {/* Experience */}
             <div className="space-y-2">
-              <Label htmlFor="interest">Interest *</Label>
+              <Label htmlFor="experience">Experience *</Label>
               <Select
-                value={formData.interest}
-                onValueChange={(value) =>
-                  setFormData({ ...formData, interest: value })
-                }
+                value={experience}
+                onValueChange={setExperience}
                 required
               >
                 <SelectTrigger className="bg-muted/50 border-border focus:border-primary focus:ring-primary/20">
-                  <SelectValue placeholder="Select an option" />
+                  <SelectValue placeholder="Select an experience" />
                 </SelectTrigger>
                 <SelectContent>
-                  {interestOptions.map((option) => (
-                    <SelectItem key={option.value} value={option.value}>
-                      {option.label}
-                    </SelectItem>
-                  ))}
+                  <SelectItem value="snowdao">SnowDAO</SelectItem>
+                  <SelectItem value="hackerboat">Hacker Boat</SelectItem>
+                  <SelectItem value="cafechiller">Cafe Chiller</SelectItem>
+                  <SelectItem value="roadtopn">Road to PN</SelectItem>
                 </SelectContent>
               </Select>
-            </div>
-
-            {/* Message */}
-            <div className="space-y-2">
-              <Label htmlFor="message">Short message</Label>
-              <Textarea
-                id="message"
-                name="message"
-                value={formData.message}
-                onChange={(e) =>
-                  setFormData({ ...formData, message: e.target.value })
-                }
-                placeholder="Tell us a bit about you and what brought you here..."
-                rows={4}
-                className="bg-muted/50 border-border focus:border-primary focus:ring-primary/20 resize-none"
-              />
             </div>
 
             {/* Submit */}
@@ -158,29 +141,10 @@ export function JoinSection() {
               size="lg"
               className="w-full"
             >
-              Send
+              <MessageCircle className="w-4 h-4 mr-2" />
+              Join the Telegram Group
             </Button>
           </motion.form>
-
-          {/* Alternative CTA */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={isInView ? { opacity: 1 } : {}}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="mt-6 text-center"
-          >
-            <p className="text-muted-foreground mb-4">Or jump straight in:</p>
-            <Button variant="outline" asChild>
-              <a
-                href="https://t.me/ethperience"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <MessageCircle className="w-4 h-4 mr-2" />
-                Join the Telegram
-              </a>
-            </Button>
-          </motion.div>
         </div>
       </div>
     </section>
