@@ -95,8 +95,7 @@ export function HeroSection() {
 
           {/* Subtitle */}
           <p className="text-base sm:text-lg text-muted-foreground mb-8 max-w-xl mx-auto leading-relaxed opacity-0 animate-hero-fade-up-delayed">
-            Curated trips for builders, founders and explorers who prefer
-            campfires over conference halls.
+            Beta v0.2 – Hyperspeed engaged 🚀
           </p>
 
           {/* CTAs */}
