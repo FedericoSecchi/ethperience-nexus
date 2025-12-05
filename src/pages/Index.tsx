@@ -11,7 +11,7 @@ import { FooterSection } from "@/components/sections/FooterSection";
 
 const Index = () => {
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen overflow-x-hidden">
       <Navigation />
       <HeroSection />
       <AboutSection />

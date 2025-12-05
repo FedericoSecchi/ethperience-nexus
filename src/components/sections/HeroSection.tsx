@@ -54,7 +54,7 @@ export function HeroSection() {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 pb-24 md:pt-28 md:pb-32">
       {/* Liquid Ether Background */}
-      <div className="absolute inset-0 -z-10" style={backgroundMotionStyle}>
+      <div className="absolute inset-0 -z-10 overflow-hidden" style={backgroundMotionStyle}>
         <Suspense fallback={null}>
           <LiquidEther />
         </Suspense>
