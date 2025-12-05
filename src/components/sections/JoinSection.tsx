@@ -1,129 +1,51 @@
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { Sparkles, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { MessageCircle } from "lucide-react";
 
-const experiences: Record<string, string> = {
-  snowdao: "SnowDAO",
-  hackerboat: "Hacker Boat",
-  cafechiller: "Cafe Chiller",
-  roadtopn: "Road to PN",
-};
+const TELEGRAM_URL = "https://t.me/ethperience";
 
 export function JoinSection() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    const formData = new FormData(event.currentTarget);
-    const alias = (formData.get("alias") as string || "").trim();
-    const telegram = (formData.get("telegram") as string || "").trim();
-    const experience = (formData.get("experience") as string || "").trim();
-
-    // Normalize telegram: add @ if not present
-    const telegramNormalized = telegram && !telegram.startsWith("@") 
-      ? `@${telegram}` 
-      : telegram;
-
-    // Build the English message
-    const message = `Hey! I'm ${alias}${telegramNormalized ? ` (${telegramNormalized})` : ""}. I'd love to join ETHperience and I'm interested in ${experiences[experience] || experience}. Nice to meet everyone! 🙌`;
-
-    // Build Telegram URL
-    const telegramUrl = `https://t.me/ethperience?text=${encodeURIComponent(message)}`;
-
-    // Open Telegram in new tab
-    window.open(telegramUrl, "_blank", "noopener,noreferrer");
-  };
-
   return (
-    <section id="join-us" ref={ref} className="py-24 lg:py-32 relative">
-      {/* Background */}
-      <div className="absolute inset-0 grid-bg opacity-20" />
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-primary/10 rounded-full blur-[150px] pointer-events-none" />
+    <section
+      id="join"
+      className="relative py-20 md:py-28 bg-gradient-to-b from-slate-950 via-slate-950/90 to-slate-950 overflow-hidden"
+    >
+      {/* Soft background glow */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-40 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-emerald-500/10 blur-3xl" />
+        <div className="absolute bottom-0 right-0 h-72 w-72 translate-x-1/3 translate-y-1/3 rounded-full bg-indigo-500/10 blur-3xl" />
+      </div>
 
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="max-w-2xl mx-auto">
-          {/* Header */}
-          <motion.div
-            initial={{ opacity: 0, y: 24, scale: 0.98 }}
-            animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
-            transition={{ duration: 0.7, ease: [0.22, 0.61, 0.36, 1] }}
-            className="text-center mb-12"
+      <div className="relative mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 text-center">
+        <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1 text-xs font-medium text-slate-100">
+          <Sparkles className="h-3 w-3 text-emerald-400" />
+          <span>Small crew. High signal.</span>
+        </div>
+
+        <h2 className="mb-4 text-balance text-3xl sm:text-4xl font-semibold tracking-tight text-slate-50">
+          Join the ETHperience crew
+        </h2>
+
+        <p className="mb-4 text-balance text-base sm:text-lg leading-relaxed text-slate-300/85">
+          ETHperience is a curated group of builders, founders and explorers who prefer real adventures over
+          hotel lobbies and forced networking. If this resonates with you, jump into our Telegram hub and say hi.
+        </p>
+
+        <p className="mb-8 text-sm sm:text-base text-slate-400">
+          When you join, drop a quick message sharing who you are, what you&apos;re building and which experience
+          you&apos;d love to join — SnowDAO, Hacker Boat, Café Chiller or Road to PN. Keep it simple, keep it real.
+        </p>
+
+        <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <Button
+            asChild
+            size="lg"
+            className="w-full sm:w-auto gap-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-lg shadow-emerald-500/25"
           >
-            <h2 className="text-3xl lg:text-5xl font-heading font-bold mb-4">
-              Join the{" "}
-              <span className="text-primary text-glow">ETHperience</span> circle
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              Tell us who you are and how you'd like to plug in.
-            </p>
-          </motion.div>
-
-          {/* Form */}
-          <motion.form
-            initial={{ opacity: 0, y: 36, scale: 0.98 }}
-            animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
-            transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 0.61, 0.36, 1] }}
-            onSubmit={handleSubmit}
-            className="glass-card p-6 lg:p-8 space-y-6"
-          >
-            {/* Alias */}
-            <div className="space-y-2">
-              <Label htmlFor="alias">Alias *</Label>
-              <Input
-                id="alias"
-                name="alias"
-                type="text"
-                placeholder="Your alias"
-                required
-                className="bg-muted/50 border-border focus:border-primary focus:ring-primary/20"
-              />
-            </div>
-
-            {/* Telegram */}
-            <div className="space-y-2">
-              <Label htmlFor="telegram">Telegram (sin @)</Label>
-              <Input
-                id="telegram"
-                name="telegram"
-                type="text"
-                placeholder="username"
-                className="bg-muted/50 border-border focus:border-primary focus:ring-primary/20"
-              />
-            </div>
-
-            {/* Experience */}
-            <div className="space-y-2">
-              <Label htmlFor="experience">Experience *</Label>
-              <select
-                id="experience"
-                name="experience"
-                required
-                defaultValue="snowdao"
-                className="flex h-10 w-full rounded-md border border-input bg-muted/50 px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 border-border focus:border-primary focus:ring-primary/20"
-              >
-                <option value="snowdao">SnowDAO</option>
-                <option value="hackerboat">Hacker Boat</option>
-                <option value="cafechiller">Cafe Chiller</option>
-                <option value="roadtopn">Road to PN</option>
-              </select>
-            </div>
-
-            {/* Submit */}
-            <Button
-              type="submit"
-              variant="hero"
-              size="lg"
-              className="w-full"
-            >
-              <MessageCircle className="w-4 h-4 mr-2" />
-              Join the Telegram Group
-            </Button>
-          </motion.form>
+            <a href={TELEGRAM_URL} target="_blank" rel="noreferrer noopener">
+              <MessageCircle className="h-4 w-4" />
+              Join the Telegram hub
+            </a>
+          </Button>
         </div>
       </div>
     </section>
