@@ -31,9 +31,9 @@ const Hyperspeed = ({
 
     fov: 90,
 
-    fovSpeedUp: 90,
+    fovSpeedUp: 75,
 
-    speedUp: 10,
+    speedUp: 6,
 
     carLightsFade: 0.4,
 
