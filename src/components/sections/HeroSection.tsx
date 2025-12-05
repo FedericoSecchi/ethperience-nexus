@@ -95,7 +95,7 @@ export function HeroSection() {
 
           {/* Subtitle */}
           <p className="text-base sm:text-lg text-muted-foreground mb-8 max-w-xl mx-auto leading-relaxed opacity-0 animate-hero-fade-up-delayed">
-            Beta v0.2 – Hyperspeed engaged 🚀
+            Community · Web3 · Adventure
           </p>
 
           {/* CTAs */}
