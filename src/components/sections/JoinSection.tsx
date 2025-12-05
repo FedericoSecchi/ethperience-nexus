@@ -6,7 +6,7 @@ const TELEGRAM_URL = "https://t.me/ethperience";
 export function JoinSection() {
   return (
     <section
-      id="join"
+      id="join-us"
       className="relative py-20 md:py-28 bg-gradient-to-b from-slate-950 via-slate-950/90 to-slate-950 overflow-hidden"
     >
       {/* Soft background glow */}
