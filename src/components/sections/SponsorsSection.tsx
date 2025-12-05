@@ -1,5 +1,6 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
 
@@ -87,7 +88,7 @@ export function SponsorsSection() {
           className="text-center"
         >
           <Button variant="secondary" size="lg" asChild>
-            <a href="#join-us">Talk about sponsorship</a>
+            <Link to="/sponsors">Talk about sponsorship</Link>
           </Button>
         </motion.div>
       </div>

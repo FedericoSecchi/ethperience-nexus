@@ -1,11 +1,13 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 const experiences = [
   {
     emoji: "🏍️",
     title: "Road to PN – Moto Trip",
+    slug: "road-to-pn",
     description:
       "Multi-day moto trip for riders who want winding roads, good food and late-night chats about protocols, tokens and life.",
     tags: ["On the road", "Builders", "Long-form conversations"],
@@ -13,6 +15,7 @@ const experiences = [
   {
     emoji: "⛵",
     title: "Hacker Boat",
+    slug: "hacker-boat",
     description:
       "Days on the water, laptops on deck. Code sprints, idea jams and swims between commits.",
     tags: ["On the water", "Deep work", "Crypto meets sea"],
@@ -20,6 +23,7 @@ const experiences = [
   {
     emoji: "🏝️",
     title: "Cafe Chiller – Island Mode",
+    slug: "cafe-chiller",
     description:
       "Island base with good coffee, slow mornings and exploration afternoons. Perfect for remote teams and DAO squads.",
     tags: ["Island life", "Remote work", "Soft pace"],
@@ -27,6 +31,7 @@ const experiences = [
   {
     emoji: "❄️",
     title: "SnowDAO",
+    slug: "snow-dao",
     description:
       "Snow, slopes and sauna chats. Morning rides, evening debriefs and late-night scheming.",
     tags: ["Snow", "Teams", "Reset + rethink"],
@@ -102,7 +107,7 @@ export function ExperiencesSection() {
 
               {/* CTA */}
               <Button variant="outline" size="sm" className="w-full" asChild>
-                <a href="#join-us">View details</a>
+                <Link to={`/experience/${exp.slug}`}>View details</Link>
               </Button>
             </motion.div>
           ))}

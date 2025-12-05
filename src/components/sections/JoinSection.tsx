@@ -11,43 +11,42 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { toast } from "@/hooks/use-toast";
-import { Send, MessageCircle } from "lucide-react";
+import { MessageCircle } from "lucide-react";
 
 const interestOptions = [
-  "I want to join a future trip",
-  "I want to bring my team",
-  "I'm interested in sponsoring",
-  "I just want to stay in the loop",
+  { value: "viajes", label: "Viajes" },
+  { value: "comunidad", label: "Comunidad" },
+  { value: "sponsor", label: "Sponsor" },
 ];
 
 export function JoinSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    role: "",
+    alias: "",
+    telegram: "",
     interest: "",
     message: "",
   });
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
 
-    // Simulate submission
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    const { alias, telegram, interest, message } = formData;
 
-    toast({
-      title: "Got it!",
-      description:
-        "We'll reach out when the next experience matches your vibe.",
-    });
+    // Build mailto URL
+    const subject = encodeURIComponent("ETHperience – New contact");
+    const body = encodeURIComponent(
+      `Alias: ${alias}\nTelegram: ${telegram}\nInterés: ${interest}\nMensaje:\n${message}`
+    );
 
-    setIsSubmitting(false);
-    setFormData({ name: "", email: "", role: "", interest: "", message: "" });
+    const mailtoUrl = `mailto:federico.secchimarino@gmail.com?subject=${subject}&body=${body}`;
+
+    // Open email client
+    window.location.href = mailtoUrl;
+
+    // Reset form
+    setFormData({ alias: "", telegram: "", interest: "", message: "" });
   };
 
   return (
@@ -82,51 +81,40 @@ export function JoinSection() {
             onSubmit={handleSubmit}
             className="glass-card p-6 lg:p-8 space-y-6"
           >
-            {/* Name & Email Row */}
-            <div className="grid sm:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">Name *</Label>
-                <Input
-                  id="name"
-                  value={formData.name}
-                  onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
-                  }
-                  required
-                  className="bg-muted/50 border-border focus:border-primary focus:ring-primary/20"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="email">Email *</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) =>
-                    setFormData({ ...formData, email: e.target.value })
-                  }
-                  required
-                  className="bg-muted/50 border-border focus:border-primary focus:ring-primary/20"
-                />
-              </div>
+            {/* Alias */}
+            <div className="space-y-2">
+              <Label htmlFor="alias">Alias *</Label>
+              <Input
+                id="alias"
+                name="alias"
+                value={formData.alias}
+                onChange={(e) =>
+                  setFormData({ ...formData, alias: e.target.value })
+                }
+                required
+                className="bg-muted/50 border-border focus:border-primary focus:ring-primary/20"
+              />
             </div>
 
-            {/* Role */}
+            {/* Telegram */}
             <div className="space-y-2">
-              <Label htmlFor="role">Role / What you do in web3</Label>
+              <Label htmlFor="telegram">Telegram handle *</Label>
               <Input
-                id="role"
-                value={formData.role}
+                id="telegram"
+                name="telegram"
+                value={formData.telegram}
                 onChange={(e) =>
-                  setFormData({ ...formData, role: e.target.value })
+                  setFormData({ ...formData, telegram: e.target.value })
                 }
+                placeholder="@username"
+                required
                 className="bg-muted/50 border-border focus:border-primary focus:ring-primary/20"
               />
             </div>
 
             {/* Interest */}
             <div className="space-y-2">
-              <Label htmlFor="interest">How do you want to be involved? *</Label>
+              <Label htmlFor="interest">Interest *</Label>
               <Select
                 value={formData.interest}
                 onValueChange={(value) =>
@@ -139,8 +127,8 @@ export function JoinSection() {
                 </SelectTrigger>
                 <SelectContent>
                   {interestOptions.map((option) => (
-                    <SelectItem key={option} value={option}>
-                      {option}
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -149,14 +137,15 @@ export function JoinSection() {
 
             {/* Message */}
             <div className="space-y-2">
-              <Label htmlFor="message">Tell us a bit about you</Label>
+              <Label htmlFor="message">Short message</Label>
               <Textarea
                 id="message"
+                name="message"
                 value={formData.message}
                 onChange={(e) =>
                   setFormData({ ...formData, message: e.target.value })
                 }
-                placeholder="Short is fine. Who are you, what excites you and what brought you here?"
+                placeholder="Tell us a bit about you and what brought you here..."
                 rows={4}
                 className="bg-muted/50 border-border focus:border-primary focus:ring-primary/20 resize-none"
               />
@@ -168,16 +157,8 @@ export function JoinSection() {
               variant="hero"
               size="lg"
               className="w-full"
-              disabled={isSubmitting}
             >
-              {isSubmitting ? (
-                "Syncing to the chain…"
-              ) : (
-                <>
-                  <Send className="w-4 h-4 mr-2" />
-                  Send
-                </>
-              )}
+              Send
             </Button>
           </motion.form>
 
