@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { lazy, Suspense, useState, useEffect, type CSSProperties } from "react";
 
-const LiquidEther = lazy(() => import("@/components/LiquidEther"));
+const Hyperspeed = lazy(() => import("@/components/Hyperspeed"));
 
 export function HeroSection() {
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -53,10 +53,10 @@ export function HeroSection() {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 pb-24 md:pt-28 md:pb-32">
-      {/* Liquid Ether Background */}
+      {/* Hyperspeed Background */}
       <div className="absolute inset-0 -z-10 overflow-hidden" style={backgroundMotionStyle}>
         <Suspense fallback={null}>
-          <LiquidEther />
+          <Hyperspeed />
         </Suspense>
       </div>
       
