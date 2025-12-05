@@ -1,59 +1,42 @@
 import { motion, useInView } from "framer-motion";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { MessageCircle } from "lucide-react";
 
-const experiences = {
-  snowdao: {
-    label: "SnowDAO",
-    tg: "https://t.me/ethperience",
-  },
-  hackerboat: {
-    label: "Hacker Boat",
-    tg: "https://t.me/ethperience",
-  },
-  cafechiller: {
-    label: "Cafe Chiller",
-    tg: "https://t.me/ethperience",
-  },
-  roadtopn: {
-    label: "Road to PN",
-    tg: "https://t.me/ethperience",
-  },
+const experiences: Record<string, string> = {
+  snowdao: "SnowDAO",
+  hackerboat: "Hacker Boat",
+  cafechiller: "Cafe Chiller",
+  roadtopn: "Road to PN",
 };
 
 export function JoinSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const [alias, setAlias] = useState("");
-  const [telegram, setTelegram] = useState("");
-  const [experience, setExperience] = useState("snowdao");
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
 
-    const exp = experiences[experience as keyof typeof experiences];
-    const telegramFormatted = telegram ? ` (@${telegram})` : "";
+    const formData = new FormData(event.currentTarget);
+    const alias = (formData.get("alias") as string || "").trim();
+    const telegram = (formData.get("telegram") as string || "").trim();
+    const experience = (formData.get("experience") as string || "").trim();
 
-    const message = `Hey! I'm ${alias}${telegramFormatted}. I'd love to join ETHperience and I'm interested in ${exp.label}. Nice to meet everyone! 🙌`;
+    // Normalize telegram: add @ if not present
+    const telegramNormalized = telegram && !telegram.startsWith("@") 
+      ? `@${telegram}` 
+      : telegram;
 
-    const tgUrl = `${exp.tg}?text=${encodeURIComponent(message)}`;
+    // Build the English message
+    const message = `Hey! I'm ${alias}${telegramNormalized ? ` (${telegramNormalized})` : ""}. I'd love to join ETHperience and I'm interested in ${experiences[experience] || experience}. Nice to meet everyone! 🙌`;
 
-    window.open(tgUrl, "_blank");
+    // Build Telegram URL
+    const telegramUrl = `https://t.me/ethperience?text=${encodeURIComponent(message)}`;
 
-    // Reset form
-    setAlias("");
-    setTelegram("");
-    setExperience("snowdao");
+    // Open Telegram in new tab
+    window.open(telegramUrl, "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -94,8 +77,8 @@ export function JoinSection() {
               <Input
                 id="alias"
                 name="alias"
-                value={alias}
-                onChange={(e) => setAlias(e.target.value)}
+                type="text"
+                placeholder="Your alias"
                 required
                 className="bg-muted/50 border-border focus:border-primary focus:ring-primary/20"
               />
@@ -107,8 +90,7 @@ export function JoinSection() {
               <Input
                 id="telegram"
                 name="telegram"
-                value={telegram}
-                onChange={(e) => setTelegram(e.target.value)}
+                type="text"
                 placeholder="username"
                 className="bg-muted/50 border-border focus:border-primary focus:ring-primary/20"
               />
@@ -117,21 +99,18 @@ export function JoinSection() {
             {/* Experience */}
             <div className="space-y-2">
               <Label htmlFor="experience">Experience *</Label>
-              <Select
-                value={experience}
-                onValueChange={setExperience}
+              <select
+                id="experience"
+                name="experience"
                 required
+                defaultValue="snowdao"
+                className="flex h-10 w-full rounded-md border border-input bg-muted/50 px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 border-border focus:border-primary focus:ring-primary/20"
               >
-                <SelectTrigger className="bg-muted/50 border-border focus:border-primary focus:ring-primary/20">
-                  <SelectValue placeholder="Select an experience" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="snowdao">SnowDAO</SelectItem>
-                  <SelectItem value="hackerboat">Hacker Boat</SelectItem>
-                  <SelectItem value="cafechiller">Cafe Chiller</SelectItem>
-                  <SelectItem value="roadtopn">Road to PN</SelectItem>
-                </SelectContent>
-              </Select>
+                <option value="snowdao">SnowDAO</option>
+                <option value="hackerboat">Hacker Boat</option>
+                <option value="cafechiller">Cafe Chiller</option>
+                <option value="roadtopn">Road to PN</option>
+              </select>
             </div>
 
             {/* Submit */}
